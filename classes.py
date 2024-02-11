@@ -1,10 +1,28 @@
 import random
 
+
 class Card:
-    # TODO: Allow to create cards with symbols such as 'As' or 'Ks'
-    values = {2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten',
-              11: 'Jack', 12: 'Queen', 13: 'King', 14: 'Ace'}
-    suits = {1: ['Clubs', "♣"], 2: ['Diamonds', "♦"], 3: ['Hearts', "♥"], 4: ['Spades', "♠"]}
+    values = {
+        2: "Two",
+        3: "Three",
+        4: "Four",
+        5: "Five",
+        6: "Six",
+        7: "Seven",
+        8: "Eight",
+        9: "Nine",
+        10: "Ten",
+        11: "Jack",
+        12: "Queen",
+        13: "King",
+        14: "Ace",
+    }
+    suits = {
+        1: ["Clubs", "♣"],
+        2: ["Diamonds", "♦"],
+        3: ["Hearts", "♥"],
+        4: ["Spades", "♠"],
+    }
 
     def __init__(self, value, suit_val):
         self.value = value
@@ -20,6 +38,9 @@ class Card:
     def __repr__(self):
         return self.show()
 
+    def show(self):
+        return self.symbol
+
     def __eq__(self, other):
         if isinstance(other, Card):
             return self.value == other.value and self.suit_val == other.suit_val
@@ -28,14 +49,11 @@ class Card:
     def __hash__(self):
         return hash((self.value, self.suit_val))
 
-    def show(self):
-        return self.symbol
-
     def get_value(self):
         return self.value
 
     def get_suit(self):
-        return self.suit
+        return self.suit_val
 
 
 class Deck:
@@ -90,7 +108,7 @@ class Player(CardHolder):
         self.folded = False
         self.current_round_bet = 0
         self.total_bet = 0
-        self.type = 'Human'
+        self.type = "Human"
 
     def get_name(self):
         return self.name
@@ -123,8 +141,13 @@ class Player(CardHolder):
 
     def bet_raise(self, x, pot):
         if self.balance == x:
-            if x + self.current_round_bet - pot.get_highest_bet() >= pot.get_last_raise():
-                pot.last_raise = x + self.get_current_round_bet() - pot.get_highest_bet()
+            if (
+                x + self.current_round_bet - pot.get_highest_bet()
+                >= pot.get_last_raise()
+            ):
+                pot.last_raise = (
+                    x + self.get_current_round_bet() - pot.get_highest_bet()
+                )
             pot.balance += x
             self.balance -= x
             self.current_round_bet += x
@@ -135,8 +158,13 @@ class Player(CardHolder):
             # i.e. A bets x, B has to bet 2x (call for x and raise for x), C has to bet 4x (call for 2x, raise for 2x)
             # print(f"{x=}, {self.current_round_bet=}, {pot.highest_bet=}, {pot.last_raise=}")
             # print(f"{x + self.current_round_bet - pot.get_highest_bet() >= pot.get_last_raise()=}")
-            if x + self.current_round_bet - pot.get_highest_bet() >= pot.get_last_raise():
-                pot.last_raise = x + self.get_current_round_bet() - pot.get_highest_bet()
+            if (
+                x + self.current_round_bet - pot.get_highest_bet()
+                >= pot.get_last_raise()
+            ):
+                pot.last_raise = (
+                    x + self.get_current_round_bet() - pot.get_highest_bet()
+                )
                 pot.balance += x
                 self.balance -= x
                 self.current_round_bet += x
@@ -170,20 +198,31 @@ class Bot(Player):
     def __init__(self, name="Bot"):
         super().__init__()
         self.name = name
-        self.type = 'Bot'
+        self.type = "Bot"
 
     def decision(self, win_prob_prc, break_even_prc, pot, folded_count):
         if win_prob_prc > break_even_prc + 0.1:
             min_raise = pot.last_raise - self.current_round_bet + pot.highest_bet
             if min_raise > self.balance:
                 to_raise = self.balance
-            elif pot.balance/4 > min_raise:
-                quarter_raise = round(pot.balance/4)
-                third_raise = round(pot.balance/3)
-                half_raise = round(pot.balance/2)
+            elif pot.balance / 4 > min_raise:
+                quarter_raise = round(pot.balance / 4)
+                third_raise = round(pot.balance / 3)
+                half_raise = round(pot.balance / 2)
                 three_quarters = round(pot.balance * 0.75)
                 pot_raise = pot.balance
-                to_raise = random.choices([min_raise, quarter_raise, third_raise, half_raise, three_quarters, pot_raise], weights=(10, 40, 20, 10, 10, 10), k=1)[0]
+                to_raise = random.choices(
+                    [
+                        min_raise,
+                        quarter_raise,
+                        third_raise,
+                        half_raise,
+                        three_quarters,
+                        pot_raise,
+                    ],
+                    weights=(10, 40, 20, 10, 10, 10),
+                    k=1,
+                )[0]
             else:
                 to_raise = min_raise
             if to_raise > self.balance:
