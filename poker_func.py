@@ -2,6 +2,7 @@ from itertools import combinations
 from collections import Counter
 import _pickle as cPickle
 import random
+import copy
 from operator import itemgetter
 from poker import classes
 import math
@@ -171,7 +172,6 @@ def score_full_house_7_cards(value_count):
 
     value_count.most_common(2)
 
-    # cdef int
     score = trips_val * 100000 + 69 * 100000 + pair_val * 1000
 
     return score
