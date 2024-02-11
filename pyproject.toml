@@ -1,0 +1,7 @@
+[project]
+name = "poker"
+version = "1.0.0"
+description = "Poker project"
+
+[tool.setuptools]
+py-modules = []
