@@ -155,11 +155,9 @@ def score_full_house_7_cards(value_count):
     """
     A full house is a hand that contains three cards of one value and two cards of another value.
     """
-    # TODO: Przypadek [2, 2, 3]
     trips_val = 0
     pair_val = 0
     found_pair = 0
-
     for item in value_count.items():
         if item[1] == 3:
             if item[0] > trips_val:
