@@ -1,4 +1,5 @@
 import poker_func
+import time
 
 ##############################################################################################################
 
@@ -88,7 +89,7 @@ class Game:
             self.players.append(poker_func.Bot())
             for i in range(self.num_of_players):
                 print(
-                    f"Player {self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
+                    f"{self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
                 )
 
         else:
@@ -97,15 +98,16 @@ class Game:
                 #  name = input()
                 self.players.append(poker_func.Player(name=str(i)))
                 print(
-                    f"Player {self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
+                    f"{self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
                 )
 
     def deal_cards(self):
         player = self.players[self.action]
         for _ in range(2):
             for _ in range(self.num_of_players):
+                time.sleep(0.5)
                 player.draw_card(self.deck.deal())
-                print(f"Player {player.get_name()} was dealt a card.")
+                print(f"{player.get_name()} was dealt a card.")
                 self.next_person_turn()
                 player = self.players[self.action]
 
@@ -116,6 +118,7 @@ class Game:
             print(
                 f"{player.get_name()} pays small blind: {self.small_blind}. chip_stack: {player.get_chip_stack()}"
             )
+        time.sleep(0.5)
 
     def pay_big_blind(self):
         player = self.players[self.action]
@@ -124,6 +127,7 @@ class Game:
             print(
                 f"{player.get_name()} pays big blind: {self.big_blind}. chip_stack: {player.get_chip_stack()}"
             )
+        time.sleep(0.5)
 
     def info_about_players(self, show=0):
         for p in self.players:
@@ -132,15 +136,13 @@ class Game:
                 if p.type != "Bot" or show:
                     print(f"{p.get_cards()}. ", end="\n")
                 else:
-                    print(f"[? ?]. ", end="\n")
-                print(
-                    f"CRB: {p.get_current_round_bet()}.\n"
-                    f"TB: {p.get_total_bet()}.\n"
-                    f"B: {p.get_chip_stack()}.",
-                    end="\n",
-                )
+                    print(f"[? ?].", end=" ")
                 if p == self.players[self.button]:
                     print(f"BUTTON.")
+                print(
+                    f"Current Round Bet: {p.get_current_round_bet()}, Total Bet: {p.get_total_bet()}, Chip Stack: {p.get_chip_stack()}.",
+                )
+            print()
 
         print(f"\nPot: {self.pot.get_chip_stack()}")
         print()
@@ -151,11 +153,7 @@ class Game:
         min_raise = to_call + self.pot.get_last_raise()
         name = player.get_name()
         print(
-            f"{name} turn.\nchip_stack: {player.get_chip_stack()}.\n"
-            f"Total bet: {player.get_total_bet()}.\n"
-            f"Current round bet: {player.get_current_round_bet()}. "
-            f"Pot highest bet: {self.pot.get_highest_bet()}.\nTo call: {to_call}.\n"
-            f"Minimum amount to put if you want to raise: {min_raise}\n"
+            f"{name} turn.\nPot highest bet: {self.pot.get_highest_bet()}.\nTo call: {to_call}.\n"
         )
 
     def get_active_players(self):
@@ -620,19 +618,20 @@ class Game:
     def run(self):
         # GAME LOOP
         self.create_players(type_of_game="Bot")
+        time.sleep(2)
         while True:
             self.deck.shuffle()
 
             self.deal_cards()
-
+            time.sleep(1)
+            print("\n" * 2)
             print("########################## BLINDS ##########################")
             # SMALL BLIND AND BIG BLIND
-            print()
             self.pay_small_blind()
             self.next_person_turn()
             self.pay_big_blind()
             print()
-
+            time.sleep(2)
             self.next_person_turn()
 
             self.pot.set_highest_bet(self.players)
