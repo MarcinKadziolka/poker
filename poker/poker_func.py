@@ -196,7 +196,7 @@ class Player(CardHolder):
             return False
         return True
 
-    def chips_inflow(self, x):
+    def add_chips(self, x):
         self.chip_stack += x
 
     def get_chip_stack(self):

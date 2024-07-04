@@ -96,8 +96,6 @@ class Game:
                 #  print(f"Enter the name of Player {i}")
                 #  name = input()
                 self.players.append(poker_func.Player(name=str(i)))
-                self.players[i].chips_inflow(self.starting_chip_stack)
-
                 print(
                     f"Player {self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
                 )
@@ -329,11 +327,11 @@ class Game:
             prize = prize // len(winners)
             for w in winners:
                 if odd_chip:
-                    w.chips_inflow(prize + odd_chip)
+                    w.add_chips(prize + odd_chip)
                     print(f"{w.get_name()} gets {prize} + {odd_chip} odd chip")
                     odd_chip = 0
                 else:
-                    w.chips_inflow(prize)
+                    w.add_chips(prize)
                     print(f"{w.get_name()} gets {prize}")
             sorted_by_score[:] = [
                 p for p in sorted_by_score if p[0].get_total_bet() > 0
@@ -396,7 +394,7 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_chip_stack())
+                    player.add_chips(self.pot.get_chip_stack())
                     print(
                         f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
                         f"His chip_stack {player.get_chip_stack()}"
@@ -464,7 +462,7 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_chip_stack())
+                    player.add_chips(self.pot.get_chip_stack())
                     print(
                         f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
                         f"His chip_stack {player.get_chip_stack()}"
@@ -530,7 +528,7 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_chip_stack())
+                    player.add_chips(self.pot.get_chip_stack())
                     print(
                         f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
                         f"His chip_stack {player.get_chip_stack()}"
@@ -595,7 +593,7 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_chip_stack())
+                    player.add_chips(self.pot.get_chip_stack())
                     print(
                         f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
                         f"His chip_stack {player.get_chip_stack()}"
