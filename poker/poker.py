@@ -87,7 +87,6 @@ class Game:
             self.players.append(poker_func.Player(name="Player"))
             self.players.append(poker_func.Bot())
             for i in range(self.num_of_players):
-                self.players[i].chips_inflow(self.starting_chip_stack)
                 print(
                     f"Player {self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
                 )

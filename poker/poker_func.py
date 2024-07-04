@@ -119,7 +119,7 @@ class CardHolder:
 
 
 class Player(CardHolder):
-    def __init__(self, chip_stack=0, name="Name"):
+    def __init__(self, chip_stack=1000, name="Name"):
         super().__init__()
         self.chip_stack = chip_stack
         self.name = name
@@ -263,7 +263,8 @@ class Bot(Player):
 
 
 class Pot:
-    def __init__(self):
+    def __init__(self, min_bet=20):
+        self.min_bet = min_bet
         self.chip_stack = 0
         self.highest_bet = 0
         self.last_raise = 0
