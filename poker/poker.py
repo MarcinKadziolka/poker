@@ -432,6 +432,7 @@ class Game:
             ):
                 print("########################## FLOP ##########################")
                 print(f"Table: {self.table.get_cards()}")
+                print()
                 self.info_about_players()
 
                 if player.type == "Bot":
@@ -499,6 +500,7 @@ class Game:
             ):
                 print("########################## TURN ##########################")
                 print(f"Table: {self.table.get_cards()}")
+                print()
                 self.info_about_players()
 
                 if player.type == "Bot":
@@ -563,6 +565,7 @@ class Game:
             ):
                 print("########################## RIVER ##########################")
                 print(f"Table: {self.table.get_cards()}")
+                print()
                 self.info_about_players()
 
                 if player.type == "Bot":
