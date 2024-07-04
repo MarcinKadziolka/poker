@@ -3,8 +3,15 @@ import poker_func
 from PIL import Image, ImageTk
 import timeit
 
+# Unicode characters for the card suits
+suits = {
+    "C": "\u2663",  # Clubs
+    "D": "\u2666",  # Diamonds
+    "H": "\u2665",  # Hearts
+    "S": "\u2660",  # Spades
+}
 
-# Zwraca listę siły rąk przekazanych graczy
+
 def compare_7_card_hands(hands_7_cards):
     hands_and_scores = []
     for hand in hands_7_cards:
@@ -14,9 +21,7 @@ def compare_7_card_hands(hands_7_cards):
 
 
 def calculate(hands, table_cards):
-
     available_cards = poker_func.generate_av_cards(hands, table_cards)
-
     start = timeit.default_timer()
     win_tie_counts, amount_of_tables = poker_func.win_probability(
         hands, table_cards, available_cards, 50000
@@ -25,8 +30,14 @@ def calculate(hands, table_cards):
     strings = []
 
     for i, win_tie in enumerate(win_tie_counts):
+        hand_display = (
+            f"{hands[i][0]} {hands[i][1]}".replace("C", suits["C"])
+            .replace("D", suits["D"])
+            .replace("H", suits["H"])
+            .replace("S", suits["S"])
+        )
         strings.append(
-            f"{hands[i][0]} {hands[i][1]}\n Win: {win_tie[0] / amount_of_tables * 100:.2f} %\nTie: {win_tie[1] / amount_of_tables * 100:.2f} %"
+            f"{hand_display}\n Win: {win_tie[0] / amount_of_tables * 100:.2f} %\nTie: {win_tie[1] / amount_of_tables * 100:.2f} %"
         )
         print(f"{hands[i]},", end=" ")
         print(f"Win: {win_tie[0] / amount_of_tables * 100:.2f} %,", end=" ")
@@ -36,9 +47,7 @@ def calculate(hands, table_cards):
 
 
 def calculate_unknown(hero_hand, table_cards):
-
     available_cards = poker_func.generate_av_cards([hero_hand], table_cards)
-
     start = timeit.default_timer()
     results = poker_func.win_probability_against_unknown_cards(
         hero_hand,
@@ -50,11 +59,16 @@ def calculate_unknown(hero_hand, table_cards):
     )
     print(timeit.default_timer() - start)
 
-    # noinspection PyListCreation
     strings = []
 
+    hero_hand_display = (
+        f"{hero_hand[0]} {hero_hand[1]}".replace("C", suits["C"])
+        .replace("D", suits["D"])
+        .replace("H", suits["H"])
+        .replace("S", suits["S"])
+    )
     strings.append(
-        f"{hero_hand[0]} {hero_hand[1]}\n Win: {results[0] / results[3] * 100:.2f} %\nTie: {results[2] / results[3] * 100:.2f} %"
+        f"{hero_hand_display}\n Win: {results[0] / results[3] * 100:.2f} %\nTie: {results[2] / results[3] * 100:.2f} %"
     )
     print(f"{hero_hand},", end=" ")
     print(f"Win: {results[0] / results[3] * 100:.2f} %,", end=" ")
@@ -100,7 +114,12 @@ def get_hand_input():
 
     table_string_to_show = ""
     for card in table_cards:
-        table_string_to_show += f"{card} "
+        table_string_to_show += (
+            f"{card} ".replace("C", suits["C"])
+            .replace("D", suits["D"])
+            .replace("H", suits["H"])
+            .replace("S", suits["S"])
+        )
     table_label.configure(text=table_string_to_show)
     table_label.place(relx=0.5, rely=0.6, anchor="center")
 
@@ -167,7 +186,6 @@ height = 500
 
 frame.geometry(f"{width}x{height}")
 
-
 # Load an image in the script
 img = Image.open("images/table.png")
 
@@ -183,11 +201,15 @@ background_label.place(x=0, y=0, relwidth=1, relheight=1)
 text_boxes = []
 table_box = tk.Text(frame, height=1, width=14)
 table_box.place(relx=0.5, rely=0.5, anchor="center")
-table_box.configure(font=("Helvetica", 32))
+table_box.configure(font=("Symbola", 32))  # Use Symbola font
 table_label = tk.Label(
-    frame, text="", bg="#f0f0f0", bd=5, fg="black", font=("Helvetica", 15)
+    frame,
+    text="",
+    bg="#f0f0f0",
+    bd=5,
+    fg="black",
+    font=("Symbola", 15),  # Use Symbola font
 )
-
 
 for _ in range(6):
     text_boxes.append(
@@ -195,7 +217,7 @@ for _ in range(6):
     )
 
 for text_box in text_boxes:
-    text_box.configure(font=("Helvetica", 32))
+    text_box.configure(font=("Symbola", 32))  # Use Symbola font
 
 x_row_1 = 0.22
 x_row_2 = 0.5
@@ -216,12 +238,13 @@ text_boxes[5].place(relx=x_row_1, rely=y_row_2, anchor="center")
 labels = []
 for _ in range(6):
     labels.append(
-        tk.Label(frame, text="", bg="#f0f0f0", bd=5, fg="black", font=("Helvetica", 15))
+        tk.Label(
+            frame, text="", bg="#f0f0f0", bd=5, fg="black", font=("Symbola", 15)
+        )  # Use Symbola font
     )
 
 x_diff = 0
 y_diff = 0.14
-
 
 show = [0 for _ in range(len(text_boxes))]
 
@@ -230,6 +253,5 @@ calculate_btn = tk.Button(
     frame, text="Calculate", command=get_hand_input, font=("Helvetica", 20)
 )
 calculate_btn.place(relx=0.75, rely=0.93, anchor="center")
-
 
 frame.mainloop()
