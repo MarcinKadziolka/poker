@@ -1,8 +1,12 @@
 # Poker Texas Hold'em No Limit
 
-This project is a comprehensive implementation of a poker card game, including all necessary classes, a custom hand evaluation system, and a hand recognition system. It features an algorithm that calculates win probabilities in three modes: against known cards, unknown cards, and hand ranges. Additionally, it includes an algorithm to evaluate decision effectiveness and an AI that makes optimal mathematical decisions using these algorithms. The game allows for play against the AI, providing a challenging and educational poker experience.
-
-
+This project is a comprehensive implementation of a poker card game, including:
+- all necessary classes,
+- a custom hand evaluation system,
+- hand recognition system.
+- algorithm that calculates win probabilities in three modes: against known cards, unknown cards, and hand ranges.
+- algorithm to evaluate decision effectiveness
+- AI that makes optimal mathematical decisions using these algorithms.
 
 # Game introduction
 Poker Texas Hold'em No Limit is the most popular variant of poker, requiring a minimum of two players and typically up to ten. 
