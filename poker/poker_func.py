@@ -249,7 +249,7 @@ class Bot(Player):
             if to_raise > self.chip_stack:
                 to_raise = self.chip_stack
             self.bet_raise(to_raise, pot)
-            print(f"Bot RAISES by {to_raise}, to {self.current_round_bet}")
+            print(f"Bot RAISES by {to_raise}")
         elif win_prob_prc >= break_even_prc:
             self.call(pot)
             print(f"Bot CALLS {pot.get_highest_bet() - self.current_round_bet}")

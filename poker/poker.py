@@ -134,13 +134,13 @@ class Game:
             if not p.folded:
                 print(f"{p.get_name()}:", end=" ")
                 if p.type != "Bot" or show:
-                    print(f"{p.get_cards()}. ", end="\n")
+                    print(f"{p.get_cards()}.", end=" ")
                 else:
                     print("[? ?].", end=" ")
                 if p == self.players[self.button]:
-                    print("BUTTON.")
+                    print("BUTTON.", end=" ")
                 print(
-                    f"Current Round Bet: {p.get_current_round_bet()}, Total Bet: {p.get_total_bet()}, Chip Stack: {p.get_chip_stack()}.",
+                    f"\nCurrent Round Bet: {p.get_current_round_bet()}, Total Bet: {p.get_total_bet()}, Chip Stack: {p.get_chip_stack()}.",
                 )
             print()
 
@@ -207,12 +207,10 @@ class Game:
             decided = player.call(self.pot)
             if decided:
                 if check:
-                    print(
-                        f"Player {name} checked. chip_stack: {player.get_chip_stack()}"
-                    )
+                    print(f"{name} checked. Chip Stack: {player.get_chip_stack()}")
                 else:
                     print(
-                        f"Player {name}, called, {to_call}. chip_stack: {player.get_chip_stack()}"
+                        f"{name}, called {to_call}. Chip Stack: {player.get_chip_stack()}"
                     )
         elif option == 3:
             bet = int(input("Amount: "))
@@ -220,7 +218,7 @@ class Game:
             if decided:
                 raised_to = player.get_current_round_bet()
                 print(
-                    f"Player {name} raised to {raised_to}. chip_stack: {player.get_chip_stack()}"
+                    f"{name} raised to {raised_to}. Chip Stack: {player.get_chip_stack()}"
                 )
         else:
             print("Choose between 1 and 3")
@@ -363,7 +361,7 @@ class Game:
                 and player.current_round_bet <= self.pot.get_highest_bet()
                 and player.chip_stack > 0
             ):
-                print("########################## PREFLOP ##########################")
+                print("#" * 26, "PREFLOP", "#" * 26)
                 self.info_about_players()
 
                 if player.type == "Bot":
@@ -395,7 +393,7 @@ class Game:
                             player = p
                     player.add_chips(self.pot.get_chip_stack())
                     print(
-                        f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
+                        f"{player.get_name()} wins {self.pot.get_chip_stack()}. "
                         f"His chip_stack {player.get_chip_stack()}"
                     )
                     self.reset_game()
@@ -430,7 +428,7 @@ class Game:
                 and player.current_round_bet <= self.pot.get_highest_bet()
                 and player.chip_stack > 0
             ):
-                print("########################## FLOP ##########################")
+                print("#" * 26, "FLOP", "#" * 26)
                 print(f"Table: {self.table.get_cards()}")
                 print()
                 self.info_about_players()
@@ -498,7 +496,7 @@ class Game:
                 and player.current_round_bet <= self.pot.get_highest_bet()
                 and player.chip_stack > 0
             ):
-                print("########################## TURN ##########################")
+                print("#" * 26, "TURN", "#" * 26)
                 print(f"Table: {self.table.get_cards()}")
                 print()
                 self.info_about_players()
@@ -563,7 +561,7 @@ class Game:
                 and player.current_round_bet <= self.pot.get_highest_bet()
                 and player.chip_stack > 0
             ):
-                print("########################## RIVER ##########################")
+                print("#" * 26, "RIVER", "#" * 26)
                 print(f"Table: {self.table.get_cards()}")
                 print()
                 self.info_about_players()
@@ -629,7 +627,8 @@ class Game:
             self.deal_cards()
             time.sleep(1)
             print("\n" * 2)
-            print("########################## BLINDS ##########################")
+
+            print("#" * 26, "BLINDS", "#" * 26)
             # SMALL BLIND AND BIG BLIND
             self.pay_small_blind()
             self.next_person_turn()
@@ -655,7 +654,8 @@ class Game:
             self.num_of_players = len(self.players)
             self.set_button()
             self.set_action()
-            self.info_about_players()
+            print("#" * 26, "NEXT ROUND", "#" * 26)
+            time.sleep(1)
 
 
 def main():
