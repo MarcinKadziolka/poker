@@ -1,5 +1,4 @@
-from poker.classes import Card
-from poker.poker_func import check_hand_7_cards
+from poker.poker_func import check_hand_7_cards, Card
 import itertools
 
 # 2, 3, 6, 8, 9, 10, 14 -> [6, 8, 9, 10, 14]

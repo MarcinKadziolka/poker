@@ -1,5 +1,5 @@
+from poker.poker_func import Card
 from poker import poker_func
-from poker.classes import Card
 import pytest
 
 
