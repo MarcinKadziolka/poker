@@ -91,6 +91,18 @@ class Deck:
         for _ in range(len(self.burned_cards)):
             self.available_cards.append(self.burned_cards.pop())
 
+    def __len__(self):
+        return len(self.available_cards)
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Deck):
+            return self.available_cards == other.available_cards
+        return False
+
+    def __iter__(self):
+        for card in self.available_cards:
+            yield card
+
 
 class CardHolder:
     def __init__(self):
@@ -107,9 +119,9 @@ class CardHolder:
 
 
 class Player(CardHolder):
-    def __init__(self, name="Name"):
+    def __init__(self, chip_stack=0, name="Name"):
         super().__init__()
-        self.chip_stack = 0
+        self.chip_stack = chip_stack
         self.name = name
         self.folded = False
         self.current_round_bet = 0
