@@ -1,5 +1,4 @@
 import poker_func
-import classes
 
 ##############################################################################################################
 
@@ -20,9 +19,9 @@ strong_range = (
 
 class Game:
     def __init__(self):
-        self.table = classes.CardHolder()
-        self.pot = classes.Pot()
-        self.deck = classes.Deck()
+        self.table = poker_func.CardHolder()
+        self.pot = poker_func.Pot()
+        self.deck = poker_func.Deck()
 
         # variables
         self.small_blind = 10
@@ -85,8 +84,8 @@ class Game:
     def create_players(self, type_of_game="Bot"):
         if type_of_game == "Bot":
             self.num_of_players = 2
-            self.players.append(classes.Player("Marcin"))
-            self.players.append(classes.Bot())
+            self.players.append(poker_func.Player("Player"))
+            self.players.append(poker_func.Bot())
             for i in range(self.num_of_players):
                 self.players[i].chips_inflow(self.starting_balance)
                 print(
@@ -97,7 +96,7 @@ class Game:
             for i in range(self.num_of_players):
                 #  print(f"Enter the name of Player {i}")
                 #  name = input()
-                self.players.append(classes.Player(str(i)))
+                self.players.append(poker_func.Player(str(i)))
                 self.players[i].chips_inflow(self.starting_balance)
 
                 print(
