@@ -138,9 +138,12 @@ class Player(CardHolder):
         self.folded = True
         return True
 
+    def call_amount(self, pot):
+        return pot.get_highest_bet() - self.current_round_bet
+
     # Serves as call and check (check is a call for 0)
     def call(self, pot):
-        to_call = pot.get_highest_bet() - self.current_round_bet
+        to_call = self.call_amount(pot)
         if self.chip_stack <= to_call:
             self.current_round_bet += self.chip_stack
             self.total_bet += self.chip_stack
