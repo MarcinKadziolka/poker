@@ -151,7 +151,7 @@ class Game:
         min_raise = to_call + self.pot.get_last_raise()
         name = player.get_name()
         print(
-            f"Players {name} turn.\nchip_stack: {player.get_chip_stack()}.\n"
+            f"{name} turn.\nchip_stack: {player.get_chip_stack()}.\n"
             f"Total bet: {player.get_total_bet()}.\n"
             f"Current round bet: {player.get_current_round_bet()}. "
             f"Pot highest bet: {self.pot.get_highest_bet()}.\nTo call: {to_call}.\n"
