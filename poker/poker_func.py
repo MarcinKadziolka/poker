@@ -109,7 +109,7 @@ class CardHolder:
 class Player(CardHolder):
     def __init__(self, name="Name"):
         super().__init__()
-        self.balance = 0
+        self.chip_stack = 0
         self.name = name
         self.folded = False
         self.current_round_bet = 0
@@ -129,24 +129,24 @@ class Player(CardHolder):
     # Serves as call and check (check is a call for 0)
     def call(self, pot):
         to_call = pot.get_highest_bet() - self.current_round_bet
-        if self.balance <= to_call:
-            self.current_round_bet += self.balance
-            self.total_bet += self.balance
-            pot.balance += self.balance
-            self.balance = 0
+        if self.chip_stack <= to_call:
+            self.current_round_bet += self.chip_stack
+            self.total_bet += self.chip_stack
+            pot.chip_stack += self.chip_stack
+            self.chip_stack = 0
             print("ALL IN!")
-        elif (self.balance - to_call) > 0:
-            self.balance -= to_call
+        elif (self.chip_stack - to_call) > 0:
+            self.chip_stack -= to_call
             self.current_round_bet += to_call
             self.total_bet += to_call
-            pot.balance += to_call
+            pot.chip_stack += to_call
         else:
             print("Not enough credits")
             return False
         return True
 
     def bet_raise(self, x, pot):
-        if self.balance == x:
+        if self.chip_stack == x:
             if (
                 x + self.current_round_bet - pot.get_highest_bet()
                 >= pot.get_last_raise()
@@ -154,12 +154,12 @@ class Player(CardHolder):
                 pot.last_raise = (
                     x + self.get_current_round_bet() - pot.get_highest_bet()
                 )
-            pot.balance += x
-            self.balance -= x
+            pot.chip_stack += x
+            self.chip_stack -= x
             self.current_round_bet += x
             self.total_bet += x
             print("ALL IN!")
-        elif (self.balance - x) > 0:
+        elif (self.chip_stack - x) > 0:
             # Checks if a raise is same or bigger than last raise,
             # i.e. A bets x, B has to bet 2x (call for x and raise for x), C has to bet 4x (call for 2x, raise for 2x)
             # print(f"{x=}, {self.current_round_bet=}, {pot.highest_bet=}, {pot.last_raise=}")
@@ -171,8 +171,8 @@ class Player(CardHolder):
                 pot.last_raise = (
                     x + self.get_current_round_bet() - pot.get_highest_bet()
                 )
-                pot.balance += x
-                self.balance -= x
+                pot.chip_stack += x
+                self.chip_stack -= x
                 self.current_round_bet += x
                 self.total_bet += x
             else:
@@ -185,10 +185,10 @@ class Player(CardHolder):
         return True
 
     def chips_inflow(self, x):
-        self.balance += x
+        self.chip_stack += x
 
-    def get_balance(self):
-        return self.balance
+    def get_chip_stack(self):
+        return self.chip_stack
 
     def get_current_round_bet(self):
         return self.current_round_bet
@@ -209,14 +209,14 @@ class Bot(Player):
     def decision(self, win_prob_prc, break_even_prc, pot, folded_count):
         if win_prob_prc > break_even_prc + 0.1:
             min_raise = pot.last_raise - self.current_round_bet + pot.highest_bet
-            if min_raise > self.balance:
-                to_raise = self.balance
-            elif pot.balance / 4 > min_raise:
-                quarter_raise = round(pot.balance / 4)
-                third_raise = round(pot.balance / 3)
-                half_raise = round(pot.balance / 2)
-                three_quarters = round(pot.balance * 0.75)
-                pot_raise = pot.balance
+            if min_raise > self.chip_stack:
+                to_raise = self.chip_stack
+            elif pot.chip_stack / 4 > min_raise:
+                quarter_raise = round(pot.chip_stack / 4)
+                third_raise = round(pot.chip_stack / 3)
+                half_raise = round(pot.chip_stack / 2)
+                three_quarters = round(pot.chip_stack * 0.75)
+                pot_raise = pot.chip_stack
                 to_raise = random.choices(
                     [
                         min_raise,
@@ -231,8 +231,8 @@ class Bot(Player):
                 )[0]
             else:
                 to_raise = min_raise
-            if to_raise > self.balance:
-                to_raise = self.balance
+            if to_raise > self.chip_stack:
+                to_raise = self.chip_stack
             self.bet_raise(to_raise, pot)
             print(f"Bot RAISES by {to_raise}, to {self.current_round_bet}")
         elif win_prob_prc >= break_even_prc:
@@ -252,7 +252,7 @@ class Bot(Player):
 
 class Pot:
     def __init__(self):
-        self.balance = 0
+        self.chip_stack = 0
         self.highest_bet = 0
         self.last_raise = 0
 
@@ -270,8 +270,8 @@ class Pot:
     def get_highest_bet(self):
         return self.highest_bet
 
-    def get_balance(self):
-        return self.balance
+    def get_chip_stack(self):
+        return self.chip_stack
 
     def get_last_raise(self):
         return self.last_raise
@@ -800,8 +800,8 @@ def expected_value(win_prc, to_win, lose_prc, to_lose):
     return (win_prc * to_win) - (lose_prc * to_lose)
 
 
-def pot_odds_break_even(to_call, pot_balance):
-    to_win = to_call + pot_balance
+def pot_odds_break_even(to_call, pot_chip_stack):
+    to_win = to_call + pot_chip_stack
     to_lose = to_call
     if to_lose == 0:
         return 0, 0
@@ -810,10 +810,10 @@ def pot_odds_break_even(to_call, pot_balance):
     return pot_odds, break_even
 
 
-def implied_odds(to_call, pot_balance, improve_prc):
+def implied_odds(to_call, pot_chip_stack, improve_prc):
     improve_prc /= 100
     # ((1 / Eq) * C) – (P + C)
-    return round((1 / improve_prc * to_call) - (pot_balance + to_call))
+    return round((1 / improve_prc * to_call) - (pot_chip_stack + to_call))
 
 
 def generate_all_possible_hole_cards(passed_available_cards):

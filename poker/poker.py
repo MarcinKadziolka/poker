@@ -26,7 +26,7 @@ class Game:
         # variables
         self.small_blind = 10
         self.big_blind = self.small_blind * 2
-        self.starting_balance = 1000
+        self.starting_chip_stack = 1000
         self.num_of_players = 2
         self.folded_count = 0
         self.players = []
@@ -72,7 +72,7 @@ class Game:
         self.river = False
         self.table.clear_cards()
         self.pot.highest_bet = 0
-        self.pot.balance = 0
+        self.pot.chip_stack = 0
         self.pot.last_raise = 0
         for player in self.players:
             player.clear_cards()
@@ -87,9 +87,9 @@ class Game:
             self.players.append(poker_func.Player("Player"))
             self.players.append(poker_func.Bot())
             for i in range(self.num_of_players):
-                self.players[i].chips_inflow(self.starting_balance)
+                self.players[i].chips_inflow(self.starting_chip_stack)
                 print(
-                    f"Player {self.players[i].get_name()} created, starting balance: {self.players[i].balance}"
+                    f"Player {self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
                 )
 
         else:
@@ -97,10 +97,10 @@ class Game:
                 #  print(f"Enter the name of Player {i}")
                 #  name = input()
                 self.players.append(poker_func.Player(str(i)))
-                self.players[i].chips_inflow(self.starting_balance)
+                self.players[i].chips_inflow(self.starting_chip_stack)
 
                 print(
-                    f"Player {self.players[i].get_name()} created, starting balance: {self.players[i].balance}"
+                    f"Player {self.players[i].get_name()} created, starting chip_stack: {self.players[i].chip_stack}"
                 )
 
     def deal_cards(self):
@@ -117,7 +117,7 @@ class Game:
         flag = player.bet_raise(self.small_blind, self.pot)
         if flag:
             print(
-                f"{player.get_name()} pays small blind: {self.small_blind}. Balance: {player.get_balance()}"
+                f"{player.get_name()} pays small blind: {self.small_blind}. chip_stack: {player.get_chip_stack()}"
             )
 
     def pay_big_blind(self):
@@ -125,7 +125,7 @@ class Game:
         flag = player.bet_raise(self.big_blind, self.pot)
         if flag:
             print(
-                f"{player.get_name()} pays big blind: {self.big_blind}. Balance: {player.get_balance()}"
+                f"{player.get_name()} pays big blind: {self.big_blind}. chip_stack: {player.get_chip_stack()}"
             )
 
     def info_about_players(self, show=0):
@@ -139,13 +139,13 @@ class Game:
                 print(
                     f"CRB: {p.get_current_round_bet()}.\n"
                     f"TB: {p.get_total_bet()}.\n"
-                    f"B: {p.get_balance()}.",
+                    f"B: {p.get_chip_stack()}.",
                     end="\n",
                 )
                 if p == self.players[self.button]:
                     print(f"BUTTON.")
 
-        print(f"\nPot: {self.pot.get_balance()}")
+        print(f"\nPot: {self.pot.get_chip_stack()}")
         print()
 
     def info_about_player(self):
@@ -154,7 +154,7 @@ class Game:
         min_raise = to_call + self.pot.get_last_raise()
         name = player.get_name()
         print(
-            f"Players {name} turn.\nBalance: {player.get_balance()}.\n"
+            f"Players {name} turn.\nchip_stack: {player.get_chip_stack()}.\n"
             f"Total bet: {player.get_total_bet()}.\n"
             f"Current round bet: {player.get_current_round_bet()}. "
             f"Pot highest bet: {self.pot.get_highest_bet()}.\nTo call: {to_call}.\n"
@@ -168,11 +168,11 @@ class Game:
                 active_players.append(player)
         return active_players
 
-    def get_active_players_with_positive_balance(self):
+    def get_active_players_with_positive_chip_stack(self):
         active_players = []
         for player in self.players:
             if not player.folded:
-                if player.balance > 0:
+                if player.chip_stack > 0:
                     active_players.append(player)
         return active_players
 
@@ -213,10 +213,12 @@ class Game:
             decided = player.call(self.pot)
             if decided:
                 if check:
-                    print(f"Player {name} checked. Balance: {player.get_balance()}")
+                    print(
+                        f"Player {name} checked. chip_stack: {player.get_chip_stack()}"
+                    )
                 else:
                     print(
-                        f"Player {name}, called, {to_call}. Balance: {player.get_balance()}"
+                        f"Player {name}, called, {to_call}. chip_stack: {player.get_chip_stack()}"
                     )
         elif option == 3:
             bet = int(input("Amount: "))
@@ -224,7 +226,7 @@ class Game:
             if decided:
                 raised_to = player.get_current_round_bet()
                 print(
-                    f"Player {name} raised to {raised_to}. Balance: {player.get_balance()}"
+                    f"Player {name} raised to {raised_to}. chip_stack: {player.get_chip_stack()}"
                 )
         else:
             print("Choose between 1 and 3")
@@ -245,7 +247,7 @@ class Game:
                 if not player.has_folded():
                     if (
                         player.get_current_round_bet() == highest_bet
-                        or player.get_balance() == 0
+                        or player.get_chip_stack() == 0
                     ):
                         match_count += 1
             if match_count == len(self.players) - self.folded_count:
@@ -256,7 +258,7 @@ class Game:
     def check_bankruptcy(self):
         to_delete = []
         for player in self.players:
-            if player.get_balance() == 0:
+            if player.get_chip_stack() == 0:
                 print(f"{player.get_name()} is bankrupt. He is out of the game!")
                 to_delete.append(player)
 
@@ -302,7 +304,7 @@ class Game:
         #      0              1               2         0               1               2
         print(sorted_by_score)
 
-        while pot.get_balance() > 0:
+        while pot.get_chip_stack() > 0:
             prize = 0
             smallest_total_bet = sorted_by_score[0][0].get_total_bet()
             for p in sorted_by_score:
@@ -315,7 +317,7 @@ class Game:
                 if p[0].get_total_bet() > 0:
                     p[0].total_bet -= smallest_total_bet
                     prize += smallest_total_bet
-                    pot.balance -= smallest_total_bet
+                    pot.chip_stack -= smallest_total_bet
 
             best_score = sorted_by_score[-1][2]
 
@@ -363,7 +365,7 @@ class Game:
             if (
                 not player.folded
                 and player.current_round_bet <= self.pot.get_highest_bet()
-                and player.balance > 0
+                and player.chip_stack > 0
             ):
                 print("########################## PREFLOP ##########################")
                 self.info_about_players()
@@ -376,7 +378,7 @@ class Game:
                         player.cards, strong_range, self.table.cards, choice="automatic"
                     )
                     pot_odds, break_even = poker_func.pot_odds_break_even(
-                        to_call, self.pot.balance
+                        to_call, self.pot.chip_stack
                     )
                     win_prob = results[0] / results[3]
 
@@ -395,10 +397,10 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_balance())
+                    player.chips_inflow(self.pot.get_chip_stack())
                     print(
-                        f"Player {player.get_name()} wins {self.pot.get_balance()}. "
-                        f"His balance {player.get_balance()}"
+                        f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
+                        f"His chip_stack {player.get_chip_stack()}"
                     )
                     self.reset_game()
                     break
@@ -430,7 +432,7 @@ class Game:
             if (
                 not player.folded
                 and player.current_round_bet <= self.pot.get_highest_bet()
-                and player.balance > 0
+                and player.chip_stack > 0
             ):
                 print("########################## FLOP ##########################")
                 print(f"Table: {self.table.get_cards()}")
@@ -444,7 +446,7 @@ class Game:
                         player.cards, strong_range, self.table.cards, choice="automatic"
                     )
                     pot_odds, break_even = poker_func.pot_odds_break_even(
-                        to_call, self.pot.balance
+                        to_call, self.pot.chip_stack
                     )
                     win_prob = results[0] / results[3]
 
@@ -463,10 +465,10 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_balance())
+                    player.chips_inflow(self.pot.get_chip_stack())
                     print(
-                        f"Player {player.get_name()} wins {self.pot.get_balance()}. "
-                        f"His balance {player.get_balance()}"
+                        f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
+                        f"His chip_stack {player.get_chip_stack()}"
                     )
                     self.reset_game()
                     break
@@ -497,7 +499,7 @@ class Game:
             if (
                 not player.folded
                 and player.current_round_bet <= self.pot.get_highest_bet()
-                and player.balance > 0
+                and player.chip_stack > 0
             ):
                 print("########################## TURN ##########################")
                 print(f"Table: {self.table.get_cards()}")
@@ -511,7 +513,7 @@ class Game:
                         player.cards, strong_range, self.table.cards, choice="automatic"
                     )
                     pot_odds, break_even = poker_func.pot_odds_break_even(
-                        to_call, self.pot.balance
+                        to_call, self.pot.chip_stack
                     )
                     win_prob = results[0] / results[3]
 
@@ -529,10 +531,10 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_balance())
+                    player.chips_inflow(self.pot.get_chip_stack())
                     print(
-                        f"Player {player.get_name()} wins {self.pot.get_balance()}. "
-                        f"His balance {player.get_balance()}"
+                        f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
+                        f"His chip_stack {player.get_chip_stack()}"
                     )
                     self.reset_game()
                     break
@@ -561,7 +563,7 @@ class Game:
             if (
                 not player.folded
                 and player.current_round_bet <= self.pot.get_highest_bet()
-                and player.balance > 0
+                and player.chip_stack > 0
             ):
                 print("########################## RIVER ##########################")
                 print(f"Table: {self.table.get_cards()}")
@@ -575,7 +577,7 @@ class Game:
                         player.cards, strong_range, self.table.cards, choice="automatic"
                     )
                     pot_odds, break_even = poker_func.pot_odds_break_even(
-                        to_call, self.pot.balance
+                        to_call, self.pot.chip_stack
                     )
                     win_prob = results[0] / results[3]
 
@@ -594,10 +596,10 @@ class Game:
                     for p in self.players:
                         if not p.folded:
                             player = p
-                    player.chips_inflow(self.pot.get_balance())
+                    player.chips_inflow(self.pot.get_chip_stack())
                     print(
-                        f"Player {player.get_name()} wins {self.pot.get_balance()}. "
-                        f"His balance {player.get_balance()}"
+                        f"Player {player.get_name()} wins {self.pot.get_chip_stack()}. "
+                        f"His chip_stack {player.get_chip_stack()}"
                     )
                     self.reset_game()
                     break
