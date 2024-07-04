@@ -84,7 +84,7 @@ class Game:
     def create_players(self, type_of_game="Bot"):
         if type_of_game == "Bot":
             self.num_of_players = 2
-            self.players.append(poker_func.Player("Player"))
+            self.players.append(poker_func.Player(name="Player"))
             self.players.append(poker_func.Bot())
             for i in range(self.num_of_players):
                 self.players[i].chips_inflow(self.starting_chip_stack)
@@ -96,7 +96,7 @@ class Game:
             for i in range(self.num_of_players):
                 #  print(f"Enter the name of Player {i}")
                 #  name = input()
-                self.players.append(poker_func.Player(str(i)))
+                self.players.append(poker_func.Player(name=str(i)))
                 self.players[i].chips_inflow(self.starting_chip_stack)
 
                 print(
