@@ -1,0 +1,6 @@
+iniconfig==2.0.0
+packaging==24.1
+pillow==10.4.0
+pluggy==1.5.0
+-e git+ssh://git@github.com/MarcinKadziolka/poker.git@efe4e6ad745064be95eed62d0bab9e022c715a5a#egg=poker
+pytest==8.2.2
