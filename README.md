@@ -8,6 +8,11 @@ This project is a comprehensive implementation of a poker card game from scratch
 - algorithm to evaluate decision effectiveness
 - AI that makes optimal mathematical decisions using these algorithms
 
+## Scoring system
+Let kicker = $k$, high card = $n$:
+$\text{High card} = n \cdot 100000 + k_1 \cdot 1000 + k_2 \cdot 100 + k_3 \cdot 10 + k_4 \cdot 1$
+$\text{Pair} = \text{pair value} \cdot 100000 + 13 \cdot 100000 + k_1 \cdot 1000 + k_2 \cdot 100 + k_3 \cdot 10$
+$\text{Two Pair} = \text{pair value}_1 \cdot 100000 + 25 \cdot 100000 + \text{pair value}_2 \cdot 1000 + k_1 \cdot 10$
 # Game introduction
 Poker Texas Hold'em No Limit is the most popular variant of poker, requiring a minimum of two players and typically up to ten. 
 It uses a standard deck of 52 cards, featuring ranks 2 through 10, Jack, Queen, King, and Ace in four suits: clubs, hearts, diamonds, and spades. 
