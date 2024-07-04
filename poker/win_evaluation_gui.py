@@ -225,7 +225,7 @@ x_row_3 = 0.78
 
 y_row_1 = 0.2
 y_row_2 = 0.28
-y_row_3 = 0.6
+y_row_3 = 0.62
 y_row_4 = 0.7
 
 text_boxes[0].place(relx=x_row_2, rely=y_row_1, anchor="center")
