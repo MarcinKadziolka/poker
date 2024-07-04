@@ -136,9 +136,9 @@ class Game:
                 if p.type != "Bot" or show:
                     print(f"{p.get_cards()}. ", end="\n")
                 else:
-                    print(f"[? ?].", end=" ")
+                    print("[? ?].", end=" ")
                 if p == self.players[self.button]:
-                    print(f"BUTTON.")
+                    print("BUTTON.")
                 print(
                     f"Current Round Bet: {p.get_current_round_bet()}, Total Bet: {p.get_total_bet()}, Chip Stack: {p.get_chip_stack()}.",
                 )
@@ -150,7 +150,6 @@ class Game:
     def info_about_player(self):
         player = self.players[self.action]
         to_call = self.pot.get_highest_bet() - player.get_current_round_bet()
-        min_raise = to_call + self.pot.get_last_raise()
         name = player.get_name()
         print(
             f"{name} turn.\nPot highest bet: {self.pot.get_highest_bet()}.\nTo call: {to_call}.\n"
@@ -271,7 +270,9 @@ class Game:
             self.table.draw_card(self.deck.deal())
 
     def next_round(self):
+        print()
         print("Everyone called")
+        time.sleep(2)
         # Setting next round
         self.pot.last_raise = 20
         self.pot.highest_bet = 0
