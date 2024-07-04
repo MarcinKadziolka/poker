@@ -1,6 +1,6 @@
 # Poker Texas Hold'em No Limit
 
-This project is a comprehensive implementation of a poker card game, including:
+This project is a comprehensive implementation of a poker card game from scratch, including:
 - all necessary classes
 - a custom hand evaluation system
 - hand recognition system
