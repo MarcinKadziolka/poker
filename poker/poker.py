@@ -20,7 +20,7 @@ strong_range = (
 
 class Game:
     def __init__(self):
-        self.table = poker_func.CardHolder()
+        self.table = poker_func.Player(chip_stack=0, name="Table")
         self.pot = poker_func.Pot()
         self.deck = poker_func.Deck()
 

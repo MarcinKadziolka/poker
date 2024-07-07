@@ -104,9 +104,16 @@ class Deck:
             yield card
 
 
-class CardHolder:
-    def __init__(self):
+class Player:
+    def __init__(self, chip_stack=1000, name="Name"):
         self.cards = []
+        super().__init__()
+        self.chip_stack = chip_stack
+        self.name = name
+        self.folded = False
+        self.current_round_bet = 0
+        self.total_bet = 0
+        self.type = "Human"
 
     def draw_card(self, card):
         self.cards.append(card)
@@ -116,17 +123,6 @@ class CardHolder:
 
     def clear_cards(self):
         self.cards = []
-
-
-class Player(CardHolder):
-    def __init__(self, chip_stack=1000, name="Name"):
-        super().__init__()
-        self.chip_stack = chip_stack
-        self.name = name
-        self.folded = False
-        self.current_round_bet = 0
-        self.total_bet = 0
-        self.type = "Human"
 
     def get_name(self):
         return self.name
