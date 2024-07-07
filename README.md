@@ -8,6 +8,13 @@ This project is a comprehensive implementation of a Poker Texas Hold'em No Limit
 - algorithm to evaluate decision effectiveness
 - bot that makes optimal mathematical decisions using these algorithms
 
+<img src="https://github.com/MarcinKadziolka/poker/assets/30349386/63ecabde-cf92-49c0-b388-36ef93043e86" width="600" alt="win_gui">
+
+<img src="https://github.com/MarcinKadziolka/poker/assets/30349386/d2ae2c12-7849-431a-af06-98f0c55b7c46" width="600" alt="win_gui">
+
+<img src="https://github.com/MarcinKadziolka/poker/assets/30349386/c0d97b3a-c852-463f-84b5-7078cccf9f47" width="600" alt="against_unknown">
+
+
 ## Object-oriented programming
 Game is implemented using object-oriented programming with the following classes:
 - Player: stores information about chip stack, betting amounts and has methods for acting during the game: fold, check or raise. 
