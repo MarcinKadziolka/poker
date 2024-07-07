@@ -60,3 +60,28 @@ Example: In a one-on-one game, the opponent's hand can form 1,225 possible combi
 Function: Assesses hand strength against a range of potential opponent hands using Bill Chen’s scoring method.
    
 Example: Calculate the win probability of a pair of Kings against any hands scored 8 or higher.
+
+## Installation
+
+
+### Clone and enter the repository
+```
+git clone https://github.com/MarcinKadziolka/poker.git
+cd poker
+```
+### Create virtual environment and activate it
+```
+python3 -m venv .venv
+source .venv/bin/activate
+```
+### Install required packages
+```
+pip3 install -r requirements.txt
+```
+### Run the program
+```
+python3 poker/poker.py
+```
+```
+python3 poker/win_evaluation_gui.py
+```
