@@ -187,7 +187,7 @@ height = 500
 frame.geometry(f"{width}x{height}")
 
 # Load an image in the script
-img = Image.open("images/table.png")
+img = Image.open("poker/images/table.png")
 
 # Resize the Image using resize method
 resized_img = img.resize((width, height), Image.Resampling.LANCZOS)
