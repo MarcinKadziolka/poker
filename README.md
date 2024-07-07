@@ -1,110 +1,55 @@
 # Poker Texas Hold'em No Limit
 
-This project is a comprehensive implementation of a poker card game from scratch, including:
+This project is a comprehensive implementation of a Poker Texas Hold'em No Limit game from scratch, including:
 - all necessary classes
 - a custom hand evaluation system
 - hand recognition system
-- algorithm that calculates win probabilities in three modes: against known cards, unknown cards, and hand ranges
+- algorithm that calculates win probabilities using Monte Carlo simulation
 - algorithm to evaluate decision effectiveness
-- AI that makes optimal mathematical decisions using these algorithms
+- bot that makes optimal mathematical decisions using these algorithms
 
-## Scoring system
-Let kicker = $k$, high card = $n$:
-$\text{High card} = n \cdot 100000 + k_1 \cdot 1000 + k_2 \cdot 100 + k_3 \cdot 10 + k_4 \cdot 1$
-$\text{Pair} = \text{pair value} \cdot 100000 + 13 \cdot 100000 + k_1 \cdot 1000 + k_2 \cdot 100 + k_3 \cdot 10$
-$\text{Two Pair} = \text{pair value}_1 \cdot 100000 + 25 \cdot 100000 + \text{pair value}_2 \cdot 1000 + k_1 \cdot 10$
-# Game introduction
-Poker Texas Hold'em No Limit is the most popular variant of poker, requiring a minimum of two players and typically up to ten. 
-It uses a standard deck of 52 cards, featuring ranks 2 through 10, Jack, Queen, King, and Ace in four suits: clubs, hearts, diamonds, and spades. 
-The suits have equal value. The Jack, Queen, and King are valued as 11, 12, and 13, respectively, and the Ace can be worth either 1 or 14.
+## Object-oriented programming
+Game is implemented using object-oriented programming with the following classes:
+- Player: stores information about chip stack, betting amounts and has methods for acting during the game: fold, check or raise. 
+- Bot: inherits Player class extending it by new method: decision. This method makes a decision based on mathematical probabilities.
+- Deck: stores cards
+- Card: represents card
+- Pot: stores information about amount of chips and tracks minimum bet allowed.
+- Game: controls flow of the game.
 
-## Gameplay
+## Custom Scoring System
+To evaluate and compare hand strength, an authorial scoring system was developed. This system uses a combination of addition and specifically chosen multipliers to uniquely evaluate each poker hand. Below are the precise formulas for each possible hand in poker:
 
-Players compete to form the best hand while betting against each other over four stages. In no limit, bets are only restricted by players' chip counts. Community cards are dealt face up and can be used by all players. In each betting round, players can:
-
-  - Fold: Forfeit their cards and exit the round.
-  - Call: Match the current highest bet.
-  - Raise: Increase the current bet.
-
-### Turn Order
-
-A white button marks the dealer's position, moving one spot left each round. This ensures all players experience different positions relative to the dealer. Action moves clockwise, starting from the first player left of the dealer.
-#### First Round (Pre-flop)
-
-Before play begins, the two players left of the dealer post blinds: the small blind and the big blind. Each player then receives two private cards, and the first betting round starts.
-#### Second Round (Flop)
-
-Three community cards are dealt face up, followed by the second betting round.
-#### Third Round (Turn)
-
-A fourth community card is dealt face up, followed by the third betting round.
-#### Fourth Round (River)
-
-A fifth community card is dealt face up, followed by the final betting round. If multiple players remain, a showdown occurs, and the player with the best hand wins the pot. If all but one player fold, the remaining player wins without revealing their cards.
+Let kickers be represented by $k$, and highest card of the hand as $n$:
+$$\text{High card} = n \cdot 100000 + k_1 \cdot 1000 + k_2 \cdot 100 + k_3 \cdot 10 + k_4 \cdot 1$$
+$$\text{Pair} = \text{pair value} \cdot 100000 + 13 \cdot 100000 + k_1 \cdot 1000 + k_2 \cdot 100 + k_3 \cdot 10$$
+$$\text{Two Pair} = \text{pair value}_1 \cdot 100000 + 25 \cdot 100000 + \text{pair value}_2 \cdot 1000 + k_1 \cdot 10$$
+$$\text{Three of a kind} = \text{value of the three cards} + 38 \cdot 100000 + k_1 \cdot 100 + k_2 \cdot 10$$
+$$\text{Straight} = n \cdot 100000 + 48 \cdot 100000$$
+$$\text{Flush} = n \cdot 100000 + 56 \cdot 100000 + k_1 \cdot 10000 + k_2 \cdot 1000 + k_3 \cdot 100 + k_4 \cdot 10$$
+$$\text{Full house} = \text{value of the full house} + 82 \cdot 100000 + k_1 \cdot 1000$$
+$$\text{Poker} = n \cdot 100000 + 92 \cdot 100000$$
 
 
+## Poker Win Probability Calculator
+The calculator utilizes Monte Carlo simulations to estimate probabilities. This method involves running a large number of random simulations to model the possible outcomes of a game. Here's how it works in the context of this poker calculator:
 
-Poker Win Probability Calculator
+- Random Sampling: The calculator generates random combinations of common cards and opponent hands to simulate different game scenarios.
+- Statistical Accuracy: By running thousands or even millions of these simulations, the calculator can approximate the true probability of winning a hand with high accuracy.
+- Efficiency: Instead of analyzing every possible combination exhaustively, Monte Carlo simulation allows for quick probability estimation by focusing on a representative sample of possible outcomes.
 
-This section describes the implementation of a calculator that computes win probabilities in poker using game simulation. The calculator offers three modes: against known cards, unknown cards, and hand ranges.
-Calculation Modes
-Against Known Cards
+### Calculation modes
+#### Against Known Cards
+Function: Calculates the win probability for specific player hands and common cards.
+   
+Example: For two players with no common cards, the calculator considers 1,712,304 possible combinations. It samples 50,000 combinations for quick results, achieving 2% accuracy within 5 seconds.
 
-Calculates win probability for up to six known player hands and community cards. Simulates up to 50,000 random tables for accuracy within 2 percentage points and executes in under 5 seconds.
+#### Against Unknown Cards
+Function: Evaluates probabilities by inputting two known cards and assuming two unknown cards for the opponent.
 
-Example:
+Example: In a one-on-one game, the opponent's hand can form 1,225 possible combinations. The calculator uses sampling to estimate probabilities efficiently.
 
-    Player 1: AA
-    Player 2: KK
-    Community Cards: None
-
-Simulation results for two players with various community cards are shown in Table 1.
-
-Table 1: Combinations of Missing Cards Based on Game State
-Community Cards	Available Cards	Missing Cards	Combinations
-0	48	5	1,712,304
-1	47	4	178,365
-2	46	3	15,180
-3	45	2	990
-4	44	1	44
-5	43	0	1
-Against Unknown Cards
-
-Calculates win probability for known player cards against all possible opponent hands. Uses sampling to simulate feasible games based on the number of community cards, ensuring efficient execution.
-
-Example:
-
-    Player: 8♦ 9♦
-    Opponent: ??
-
-Results show probabilities similar to a coin toss.
-Against Hand Ranges
-
-Evaluates player hand strength against a range of possible opponent hands, typically stronger hands. Uses Bill Chen's method for hand evaluation to create ranges.
-
-Example:
-
-    Player Hand: K♥ K♠
-    Opponent Range: Hands ≥ 8 points
-    Community Cards: None
-
-Bill Chen's Hand Evaluation Method
-
-    High Card Points:
-        A = 10, K = 8, Q = 7, J = 6, 10 or lower = card value.
-        Pairs: Score doubled (e.g., AA = 20 points).
-
-    Suited Bonus:
-        +2 points if suited.
-
-    Gap Penalty:
-        0-1 gap = 0 points
-        2 gaps = -1 point
-        3 gaps = -2 points
-        4 gaps = -4 points
-        5+ gaps = -5 points
-
-    Low Card Bonus:
-        +1 point if both cards < Q and gap < 3.
-
-Evaluates 1,326 possible hands to determine ranges for the calculator.
+#### Against Hand Ranges
+Function: Assesses hand strength against a range of potential opponent hands using Bill Chen’s scoring method.
+   
+Example: Calculate the win probability of a pair of Kings against any hands scored 8 or higher.
