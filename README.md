@@ -15,7 +15,7 @@ This project is a comprehensive implementation of a Poker Texas Hold'em No Limit
 <img src="https://github.com/MarcinKadziolka/poker/assets/30349386/c0d97b3a-c852-463f-84b5-7078cccf9f47" width="600" alt="against_unknown">
 
 
-## Object-oriented programming
+## Implementation
 Game is implemented using object-oriented programming with the following classes:
 - Player: stores information about chip stack, betting amounts and has methods for acting during the game: fold, check or raise. 
 - Bot: inherits Player class extending it by new method: decision. This method makes a decision based on mathematical probabilities.
