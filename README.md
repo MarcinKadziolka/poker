@@ -49,7 +49,7 @@ The calculator utilizes Monte Carlo simulations to estimate probabilities. This 
 #### Against Known Cards
 Function: Calculates the win probability for specific player hands and common cards.
    
-Example: For two players with no common cards, the calculator considers 1,712,304 possible combinations. It samples 50,000 combinations for quick results, achieving 2% accuracy within 5 seconds.
+Example: For two players with no common cards, the calculator considers 1,712,304 possible combinations. It samples 50,000 combinations for quick results, achieving 2% margin of error within 5 seconds.
 
 #### Against Unknown Cards
 Function: Evaluates probabilities by inputting two known cards and assuming two unknown cards for the opponent.
